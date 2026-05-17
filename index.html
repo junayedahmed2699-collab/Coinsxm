@@ -31,7 +31,6 @@
   window._dbPush    = push;
   window._dbOnValue = onValue;
   window._firebaseReady = true;
-  /* ── KEY FIX: use setTimeout so regular scripts finish parsing first ── */
   setTimeout(() => document.dispatchEvent(new Event("firebaseReady")), 0);
 </script>
 
@@ -113,9 +112,25 @@ body{display:flex;flex-direction:column;}
 .copy-btn:active{transform:scale(.95);}
 
 /* ad cards */
-.ad-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:6px;}
+.ad-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;}
 .ad-card{background:linear-gradient(145deg,var(--card2),var(--bg3));border:1px solid var(--border);border-radius:var(--radius);padding:14px 12px;display:flex;flex-direction:column;align-items:center;gap:10px;cursor:pointer;position:relative;overflow:hidden;transition:transform .2s,border-color .2s;}
 .ad-card:active{transform:scale(.97);}
+
+/* wide ad card (slot 3) */
+.ad-card-wide{background:linear-gradient(145deg,var(--card2),var(--bg3));border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px;display:flex;align-items:center;gap:16px;position:relative;overflow:hidden;transition:transform .2s;}
+.ad-card-wide:active{transform:scale(.99);}
+.ad-card-wide .ad-card-glow{position:absolute;inset:0;border-radius:inherit;background:radial-gradient(ellipse at 30% 50%,rgba(107,68,255,.18),transparent 70%);pointer-events:none;}
+.ad-card-wide .ad-left{display:flex;flex-direction:column;align-items:center;gap:6px;flex-shrink:0;}
+.ad-card-wide .ad-icon{font-size:32px;}
+.ad-card-wide .ad-earn{background:rgba(34,216,122,.15);color:var(--green);border-radius:20px;padding:3px 10px;font-family:var(--font-en);font-weight:700;font-size:12px;}
+.ad-card-wide .ad-right{flex:1;min-width:0;}
+.ad-card-wide .ad-name{font-size:13px;font-weight:700;color:var(--text);font-family:var(--font-en);margin-bottom:4px;}
+.ad-card-wide .ad-desc{font-size:11px;color:var(--text2);margin-bottom:10px;line-height:1.4;}
+.ad-card-wide .ad-btn{width:100%;background:linear-gradient(90deg,var(--accent2),var(--accent));color:#fff;border:none;border-radius:8px;padding:9px;font-size:12px;font-weight:700;cursor:pointer;font-family:var(--font-bn);transition:filter .2s;}
+.ad-card-wide .ad-btn:hover{filter:brightness(1.1);}
+.ad-card-wide .ad-meta{display:flex;justify-content:space-between;align-items:center;margin-top:6px;}
+.ad-card-wide .ad-cooldown{font-size:10px;color:var(--text2);font-family:var(--font-en);}
+
 .ad-card-glow{position:absolute;inset:0;border-radius:inherit;background:radial-gradient(ellipse at 50% 0%,var(--glow-color,rgba(61,107,255,.15)),transparent 70%);pointer-events:none;}
 .ad-card:nth-child(1){--glow-color:rgba(61,107,255,.2);}
 .ad-card:nth-child(2){--glow-color:rgba(245,200,66,.15);}
@@ -125,6 +140,10 @@ body{display:flex;flex-direction:column;}
 .ad-btn{width:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff;border:none;border-radius:8px;padding:9px;font-size:12px;font-weight:700;cursor:pointer;font-family:var(--font-bn);transition:filter .2s;}
 .ad-btn:hover{filter:brightness(1.1);}
 .ad-cooldown{font-size:10px;color:var(--text2);text-align:center;font-family:var(--font-en);}
+
+/* daily limit badge */
+.ad-limit-badge{font-size:10px;color:var(--text2);font-family:var(--font-en);text-align:center;}
+.ad-limit-badge.done{color:var(--red);}
 
 /* tasks */
 .task-item{display:flex;align-items:center;gap:12px;background:var(--card2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px;margin-bottom:8px;cursor:pointer;transition:transform .15s,border-color .15s;}
@@ -211,25 +230,46 @@ body{display:flex;flex-direction:column;}
       </div>
       <div class="section-title">📺 এড দেখুন ও আয় করুন</div>
 
-<div class="ad-grid">
-  <div class="ad-card" id="adCard1">
-    <div class="ad-card-glow"></div>
-    <div class="ad-icon">📡</div>
-    <div class="ad-name">Ad slot 1</div>
-    <div class="ad-earn" id="adEarn1">৳0.50</div>
-    <button class="ad-btn" onclick="watchAd(1)">এড দেখুন</button>
-    <div class="ad-cooldown" id="adCooldown1"></div>
-  </div>
+      <!-- Ad Grid: slot 1 & 2 side by side -->
+      <div class="ad-grid">
+        <div class="ad-card" id="adCard1">
+          <div class="ad-card-glow"></div>
+          <div class="ad-icon">📡</div>
+          <div class="ad-name">Ad slot 1</div>
+          <div class="ad-earn" id="adEarn1">৳0.50</div>
+          <button class="ad-btn" onclick="watchAd(1)">এড দেখুন</button>
+          <div class="ad-cooldown" id="adCooldown1"></div>
+          <div class="ad-limit-badge" id="adLimit1"></div>
+        </div>
+        <div class="ad-card" id="adCard2">
+          <div class="ad-card-glow"></div>
+          <div class="ad-icon">⚡</div>
+          <div class="ad-name">Ad slot 2</div>
+          <div class="ad-earn" id="adEarn2">৳1.00</div>
+          <button class="ad-btn" onclick="watchAd(2)">এড দেখুন</button>
+          <div class="ad-cooldown" id="adCooldown2"></div>
+          <div class="ad-limit-badge" id="adLimit2"></div>
+        </div>
+      </div>
 
-  <div class="ad-card" id="adCard2">
-    <div class="ad-card-glow"></div>
-    <div class="ad-icon">⚡</div>
-    <div class="ad-name">Ad slot 2</div>
-    <div class="ad-earn" id="adEarn2">৳1.00</div>
-    <button class="ad-btn" onclick="watchAd(2)">এড দেখুন</button>
-    <div class="ad-cooldown" id="adCooldown2"></div>
-  </div>
-</div>
+      <!-- Ad slot 3: wide card -->
+      <div class="ad-card-wide" id="adCard3" style="margin-bottom:14px;">
+        <div class="ad-card-glow"></div>
+        <div class="ad-left">
+          <div class="ad-icon">🎯</div>
+          <div class="ad-earn" id="adEarn3">৳0.75</div>
+        </div>
+        <div class="ad-right">
+          <div class="ad-name">Ad slot 3</div>
+          <div class="ad-desc">বিজ্ঞাপন দেখুন এবং সরাসরি আয় করুন</div>
+          <button class="ad-btn" onclick="watchAd(3)">▶ এড দেখুন</button>
+          <div class="ad-meta">
+            <div class="ad-cooldown" id="adCooldown3"></div>
+            <div class="ad-limit-badge" id="adLimit3"></div>
+          </div>
+        </div>
+      </div>
+
       <div class="quick-actions">
         <button class="quick-btn earn" onclick="goPage('task')">
           <div class="qb-icon">🎯</div><div>কাজ শুরু করুন</div>
@@ -252,7 +292,6 @@ body{display:flex;flex-direction:column;}
 
     <!-- TASK -->
     <div class="page" id="page-task">
-     
       <div class="section-title">✅ টাস্ক করুন</div>
       <div id="taskList"><div style="display:flex;justify-content:center;padding:30px;"><div class="spinner"></div></div></div>
     </div>
@@ -315,7 +354,7 @@ body{display:flex;flex-direction:column;}
 <script>
 /* ══ STATE ══ */
 let tgUser = null, userData = {}, config = {}, currentPage = 'home', selectedMethod = 'bkash';
-let adCooldownTimers = {1:null, 2:null};
+let adCooldownTimers = {1:null, 2:null, 3:null};
 
 /* ══ HELPERS ══ */
 function dbRef(p)    { return window._dbRef(window._db, p); }
@@ -323,6 +362,26 @@ function dbGet(p)    { return window._dbGet(dbRef(p)); }
 function dbSet(p,v)  { return window._dbSet(dbRef(p), v); }
 function dbUpdate(p,v){ return window._dbUpdate(dbRef(p), v); }
 function dbPush(p,v) { return window._dbPush(dbRef(p), v); }
+
+/* ══ DAILY LIMIT HELPERS ══ */
+function todayKey() {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+
+function getTodayWatchCount(n) {
+  const key = todayKey();
+  return userData.adWatchedDaily?.[`ad${n}`]?.[key] || 0;
+}
+
+function getAdDailyLimit(n) {
+  const limits = { 1: config.ad1DailyLimit, 2: config.ad2DailyLimit, 3: config.ad3DailyLimit };
+  return Number(limits[n] || 5);
+}
+
+function isDailyLimitReached(n) {
+  return getTodayWatchCount(n) >= getAdDailyLimit(n);
+}
 
 /* ══ TELEGRAM ══ */
 function initTelegram() {
@@ -346,14 +405,12 @@ function boot() {
   });
 }
 
-/* ── FIX: handle both cases — event fires before or after listener ── */
 if (window._firebaseReady) {
   boot();
 } else {
   document.addEventListener('firebaseReady', boot, { once: true });
 }
 
-/* timeout fallback */
 setTimeout(() => {
   if (!window._firebaseReady) {
     document.getElementById('loadScreen').innerHTML =
@@ -368,10 +425,12 @@ async function loadConfig() {
     config = snap.val();
   } else {
     config = {
-      ad1Earn:0.5, ad2Earn:1.0,
+      ad1Earn:0.5, ad2Earn:1.0, ad3Earn:0.75,
       ad1Link:'https://www.profitablecpmrate.com/YOUR_ZONE',
+      ad3Link:'https://www.profitablecpmrate.com/YOUR_ZONE_3',
       ad2Zone:'0000000',
-      ad1Cooldown:60, ad2Cooldown:120,
+      ad1Cooldown:60, ad2Cooldown:120, ad3Cooldown:90,
+      ad1DailyLimit:5, ad2DailyLimit:5, ad3DailyLimit:5,
       minWithdraw:50, referEarn:5,
       supportLink:'https://t.me/yoursupport',
       helpItems:{
@@ -397,7 +456,7 @@ async function loadOrCreateUser() {
       uid, name:`${tgUser.first_name||''} ${tgUser.last_name||''}`.trim(),
       username:tgUser.username||'', balance:0, totalEarned:0,
       referCount:0, referredBy:startParam||'', joinedAt:Date.now(),
-      adWatched:{}, tasksDone:{},
+      adWatched:{}, adWatchedDaily:{}, tasksDone:{},
     };
     await dbSet(`users/${uid}`, userData);
     if (startParam && startParam !== uid) {
@@ -414,13 +473,14 @@ async function loadOrCreateUser() {
     }
   } else {
     userData = snap.val();
+    if (!userData.adWatchedDaily) userData.adWatchedDaily = {};
   }
 }
 
 /* ══ LIVE BALANCE ══ */
 function listenUserBalance() {
   window._dbOnValue(dbRef(`users/${userData.uid}`), (snap) => {
-    if (snap.exists()) { userData = snap.val(); updateBalanceUI(); }
+    if (snap.exists()) { userData = snap.val(); if(!userData.adWatchedDaily) userData.adWatchedDaily={}; updateBalanceUI(); }
   });
 }
 
@@ -452,51 +512,91 @@ function updateBalanceUI() {
 function renderAds() {
   document.getElementById('adEarn1').textContent = `৳${Number(config.ad1Earn||0.5).toFixed(2)}`;
   document.getElementById('adEarn2').textContent = `৳${Number(config.ad2Earn||1.0).toFixed(2)}`;
+  document.getElementById('adEarn3').textContent = `৳${Number(config.ad3Earn||0.75).toFixed(2)}`;
   document.getElementById('wMinLabel').textContent = `সর্বনিম্ন উইথড্র: ৳${config.minWithdraw||50}`;
-  checkAdCooldown(1); checkAdCooldown(2);
+  checkAdCooldown(1); checkAdCooldown(2); checkAdCooldown(3);
+}
+
+function updateAdLimitBadge(n) {
+  const watched = getTodayWatchCount(n);
+  const limit = getAdDailyLimit(n);
+  const el = document.getElementById(`adLimit${n}`);
+  if (!el) return;
+  if (watched >= limit) {
+    el.textContent = `আজকের লিমিট শেষ (${watched}/${limit})`;
+    el.className = 'ad-limit-badge done';
+  } else {
+    el.textContent = `আজ দেখেছেন: ${watched}/${limit}`;
+    el.className = 'ad-limit-badge';
+  }
 }
 
 function checkAdCooldown(n) {
+  updateAdLimitBadge(n);
+  if (isDailyLimitReached(n)) { lockAdFull(n); return; }
   const last = userData.adWatched?.[`ad${n}`]||0;
-  const cooldown = Number(n===1?config.ad1Cooldown:config.ad2Cooldown)||60;
+  const cooldown = Number(n===1?config.ad1Cooldown:n===2?config.ad2Cooldown:config.ad3Cooldown)||60;
   const remaining = cooldown - (Date.now()-last)/1000;
   if (remaining>0) lockAd(n,Math.ceil(remaining)); else unlockAd(n);
+}
+
+function lockAdFull(n) {
+  const btn = document.querySelector(`#adCard${n} .ad-btn`);
+  const cdEl = document.getElementById(`adCooldown${n}`);
+  if (btn) { btn.disabled=true; btn.style.opacity='.5'; btn.style.cursor='not-allowed'; }
+  if (cdEl) cdEl.textContent = '';
+  clearInterval(adCooldownTimers[n]);
 }
 
 function lockAd(n,secs) {
   const btn = document.querySelector(`#adCard${n} .ad-btn`);
   const cdEl = document.getElementById(`adCooldown${n}`);
-  btn.disabled=true; btn.style.opacity='.5'; btn.style.cursor='not-allowed';
+  if (btn) { btn.disabled=true; btn.style.opacity='.5'; btn.style.cursor='not-allowed'; }
   let r=secs;
-  cdEl.textContent=`⏳ ${formatTime(r)} পরে উপলব্ধ`;
-  adCooldownTimers[n]=setInterval(()=>{r--;if(r<=0){clearInterval(adCooldownTimers[n]);unlockAd(n);}else{cdEl.textContent=`⏳ ${formatTime(r)} পরে উপলব্ধ`;}},1000);
+  if (cdEl) cdEl.textContent=`⏳ ${formatTime(r)} পরে উপলব্ধ`;
+  adCooldownTimers[n]=setInterval(()=>{r--;if(r<=0){clearInterval(adCooldownTimers[n]);checkAdCooldown(n);}else{if(cdEl) cdEl.textContent=`⏳ ${formatTime(r)} পরে উপলব্ধ`;}},1000);
 }
 
 function unlockAd(n) {
   const btn = document.querySelector(`#adCard${n} .ad-btn`);
   const cdEl = document.getElementById(`adCooldown${n}`);
-  btn.disabled=false; btn.style.opacity='1'; btn.style.cursor='pointer';
-  cdEl.textContent=''; clearInterval(adCooldownTimers[n]);
+  if (btn) { btn.disabled=false; btn.style.opacity='1'; btn.style.cursor='pointer'; }
+  if (cdEl) cdEl.textContent='';
+  clearInterval(adCooldownTimers[n]);
 }
 
 function formatTime(s){const m=Math.floor(s/60);const sc=s%60;return m>0?`${m}মি ${sc}সে`:`${sc}সে`;}
 
 async function watchAd(n) {
+  if (isDailyLimitReached(n)) { showToast('আজকের দৈনিক লিমিট শেষ হয়েছে','error'); return; }
+
   if (n===1) {
     const link=config.ad1Link;
     if(!link||link.includes('YOUR_ZONE')){showToast('এড লিংক কনফিগার হয়নি','error');return;}
     window.open(link,'_blank');
     await creditAd(n);
-  } else {
+  } else if (n===2) {
     if(typeof window.show_monetag_ad==='function') window.show_monetag_ad();
     else showToast('Monetag এড লোড হচ্ছে...','');
     setTimeout(()=>creditAd(n),3000);
+  } else if (n===3) {
+    const link=config.ad3Link;
+    if(!link||link.includes('YOUR_ZONE_3')){showToast('এড লিংক কনফিগার হয়নি','error');return;}
+    window.open(link,'_blank');
+    await creditAd(n);
   }
 }
 
 async function creditAd(n) {
-  const earn=Number(n===1?config.ad1Earn:config.ad2Earn)||0;
-  await dbUpdate(`users/${userData.uid}`,{balance:(userData.balance||0)+earn,totalEarned:(userData.totalEarned||0)+earn,[`adWatched/ad${n}`]:Date.now()});
+  const earn=Number(n===1?config.ad1Earn:n===2?config.ad2Earn:config.ad3Earn)||0;
+  const key = todayKey();
+  const dailyCount = getTodayWatchCount(n);
+  await dbUpdate(`users/${userData.uid}`,{
+    balance:(userData.balance||0)+earn,
+    totalEarned:(userData.totalEarned||0)+earn,
+    [`adWatched/ad${n}`]:Date.now(),
+    [`adWatchedDaily/ad${n}/${key}`]: dailyCount + 1,
+  });
   showToast(`+৳${earn.toFixed(2)} ব্যালেন্সে যোগ হয়েছে ✅`,'success');
   checkAdCooldown(n);
 }
@@ -516,7 +616,7 @@ function renderTasks(){
   if(keys.length===0){el.innerHTML='<div class="empty-state"><div class="e-icon">📭</div>কোনো টাস্ক নেই</div>';return;}
   el.innerHTML=keys.map(k=>{
     const t=tasks[k];const done=userData.tasksDone?.[k];
-    return `<div class="task-item ${done?'done':''}" onclick="${done?'':'`doTask(\''+k+'\')`'}">
+    return `<div class="task-item ${done?'done':''}" onclick="${done?'':'doTask(\''+k+'\')'}" >
       <div class="task-icon">${t.icon||'✅'}</div>
       <div class="task-info"><div class="task-name">${t.name}</div><div class="task-desc">${t.desc||''}</div></div>
       ${done?'<div class="task-done-badge">✅</div>':`<div class="task-reward">+৳${Number(t.reward).toFixed(0)}</div>`}
