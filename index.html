@@ -209,6 +209,27 @@ body{display:flex;flex-direction:column;}
         <div class="balance-amount">৳<span id="homeBalance">0.00</span></div>
         <div class="balance-sub" id="homeEarnedTotal">মোট আয়: ৳0.00</div>
       </div>
+      <div class="section-title">📺 এড দেখুন ও আয় করুন</div>
+
+<div class="ad-grid">
+  <div class="ad-card" id="adCard1">
+    <div class="ad-card-glow"></div>
+    <div class="ad-icon">📡</div>
+    <div class="ad-name">Ad slot 1</div>
+    <div class="ad-earn" id="adEarn1">৳0.50</div>
+    <button class="ad-btn" onclick="watchAd(1)">এড দেখুন</button>
+    <div class="ad-cooldown" id="adCooldown1"></div>
+  </div>
+
+  <div class="ad-card" id="adCard2">
+    <div class="ad-card-glow"></div>
+    <div class="ad-icon">⚡</div>
+    <div class="ad-name">Ad slot 2</div>
+    <div class="ad-earn" id="adEarn2">৳1.00</div>
+    <button class="ad-btn" onclick="watchAd(2)">এড দেখুন</button>
+    <div class="ad-cooldown" id="adCooldown2"></div>
+  </div>
+</div>
       <div class="quick-actions">
         <button class="quick-btn earn" onclick="goPage('task')">
           <div class="qb-icon">🎯</div><div>কাজ শুরু করুন</div>
@@ -231,25 +252,7 @@ body{display:flex;flex-direction:column;}
 
     <!-- TASK -->
     <div class="page" id="page-task">
-      <div class="section-title">📺 এড দেখুন ও আয় করুন</div>
-      <div class="ad-grid">
-        <div class="ad-card" id="adCard1">
-          <div class="ad-card-glow"></div>
-          <div class="ad-icon">📡</div>
-          <div class="ad-name">Ad slot 1</div>
-          <div class="ad-earn" id="adEarn1">৳0.50</div>
-          <button class="ad-btn" onclick="watchAd(1)">এড দেখুন</button>
-          <div class="ad-cooldown" id="adCooldown1"></div>
-        </div>
-        <div class="ad-card" id="adCard2">
-          <div class="ad-card-glow"></div>
-          <div class="ad-icon">⚡</div>
-          <div class="ad-name">Ad slot 2</div>
-          <div class="ad-earn" id="adEarn2">৳1.00</div>
-          <button class="ad-btn" onclick="watchAd(2)">এড দেখুন</button>
-          <div class="ad-cooldown" id="adCooldown2"></div>
-        </div>
-      </div>
+     
       <div class="section-title">✅ টাস্ক করুন</div>
       <div id="taskList"><div style="display:flex;justify-content:center;padding:30px;"><div class="spinner"></div></div></div>
     </div>
